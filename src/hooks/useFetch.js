@@ -7,7 +7,10 @@ export const useFetch = (url) => {
     // 5 - refatorando post
     const[config, setConfig] = useState(null); // recebe dados de configuração (cabeçalho)
     const[method,setMethod] = useState(null); // recebe a definição de metodo da requisição
-    const[callFetch, setCallFetch] = useState(false); // 
+    const[callFetch, setCallFetch] = useState(false);
+
+    // 6 - Loading
+    const[loading,setLoading] = useState(false);
 
     
     // para não ficar repetindo o código em todos os componentes
@@ -28,11 +31,16 @@ export const useFetch = (url) => {
     useEffect(() => {
 
         const fetchData = async () => {
+            // 6 - loading
+            setLoading(true);
+
             const res = await fetch(url);
 
             const json = await res.json();
 
             setData(json);
+
+            setLoading(false);
         }
 
         fetchData();
@@ -58,5 +66,5 @@ export const useFetch = (url) => {
 
     }, [config, method, url]); // toda vez que houver uma alteração na configuração ele executará
 
-    return { data, httpConfig };
+    return { data, httpConfig, loading };
 }

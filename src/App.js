@@ -11,7 +11,7 @@ function App() {
   //const [products, setProducts] = useState([]);
 
   // 4 - custom hook
-  const { data: items, httpConfig } = useFetch(url); // renomeando o data para items
+  const { data: items, httpConfig, loading } = useFetch(url); // renomeando o data para items
 
   console.log(items);
 
@@ -66,11 +66,13 @@ function App() {
     <div className="App">
       <h1>React - Requisições HTTP</h1>
       <h2>Lista de Produtos</h2>
-      <ul>
+      {/* 6- Loading */}
+      {loading && <p>Carregando Dados...</p>}
+      {!loading && <ul>
         {items && items.map((product) => ( // só roda o map se items não for null, conforme definido em useFetch.js
           <li key={product.id}>{product.name} - R$: {product.price}</li>
         ))}
-      </ul>
+      </ul>}
       <div className="add-product">
         <form onSubmit={handleSubmit}>
           <label>
@@ -87,7 +89,8 @@ function App() {
             Price:
             <input type="text" value={price} name="price" required onChange={(e) => setPrice(e.target.value)} />
           </label>
-          <button>Inserir</button>
+          {loading && <input type="submit" disabled value="Aguarde"/>}
+          {!loading && <input type="submit" value="Criar"/>}
         </form>
       </div>
 
